@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Activity, Clock, Car, BarChart3, AlertTriangle, LayoutDashboard } from 'lucide-react';
 import { socket } from '../App';
+import { API_BASE_URL } from '../config';
 
 export default function Dashboard() {
   const [stats, setStats] = useState({
@@ -21,7 +22,7 @@ export default function Dashboard() {
     }
 
     const fetchStats = async () => {
-      const res = await fetch('http://localhost:5000/api/dashboard/stats', {
+      const res = await fetch(`${API_BASE_URL}/api/dashboard/stats`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) setStats(await res.json());
@@ -29,7 +30,7 @@ export default function Dashboard() {
     };
 
     const fetchLogs = async () => {
-      const res = await fetch('http://localhost:5000/api/dispatch/log', {
+      const res = await fetch(`${API_BASE_URL}/api/dispatch/log`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) setLogs(await res.json());

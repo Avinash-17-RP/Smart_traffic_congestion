@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MapPin, Navigation, Clock, Activity, Zap, Shield, BarChart2, ChevronRight, Radio } from 'lucide-react';
 import { socket } from '../App';
+import { API_BASE_URL } from '../config';
 
 const ALGO_INFO = {
   shortest: {
@@ -24,7 +25,7 @@ export default function CitizenRoute() {
 
   useEffect(() => {
     const loadGraph = () =>
-      fetch('http://localhost:5000/api/graph')
+      fetch(`${API_BASE_URL}/api/graph`)
         .then(res => res.json())
         .then(data => {
           setJunctions(data.junctions);
@@ -74,7 +75,7 @@ export default function CitizenRoute() {
     setLoading(true);
     setResult(null);
     try {
-      const res = await fetch('http://localhost:5000/api/route/shortest', {
+      const res = await fetch(`${API_BASE_URL}/api/route/shortest`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ from, to }),

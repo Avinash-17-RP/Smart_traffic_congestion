@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { socket } from '../App';
+import { API_BASE_URL } from '../config';
 import { Network, Activity, Zap, ShieldAlert, Split } from 'lucide-react';
 
 export default function GraphView() {
@@ -44,7 +45,7 @@ export default function GraphView() {
 
   const fetchGraph = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/graph');
+      const res = await fetch(`${API_BASE_URL}/api/graph`);
       const data = await res.json();
       setGraph(data);
       // update selected node if open
@@ -61,7 +62,7 @@ export default function GraphView() {
     const token = localStorage.getItem('token');
     if (!token) return alert('Operator login required');
     const newMode = currentMode === 'fixed' ? 'adaptive' : 'fixed';
-    await fetch(`http://localhost:5000/api/junctions/${id}/mode`, {
+    await fetch(`${API_BASE_URL}/api/junctions/${id}/mode`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
       body: JSON.stringify({ mode: newMode })
@@ -84,7 +85,7 @@ export default function GraphView() {
     else if (type === 'loadbalance') endpoint = '/api/route/loadbalance';
 
     try {
-      const res = await fetch(`http://localhost:5000${endpoint}`, {
+      const res = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: 'POST',
         headers,
         body: JSON.stringify({ from, to })

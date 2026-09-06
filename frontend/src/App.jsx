@@ -8,8 +8,10 @@ import GraphView from './pages/GraphView';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 
+import { API_BASE_URL } from './config';
+
 // Create a singleton socket connection
-export const socket = io('http://localhost:5000');
+export const socket = io(API_BASE_URL);
 
 function Navigation() {
   const location = useLocation();
