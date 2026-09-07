@@ -13,11 +13,15 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: '*',
-    methods: ['GET', 'POST']
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
   }
 });
 
-app.use(cors());
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 
 const JWT_SECRET = 'matrsn_super_secret_key_for_demo';
@@ -42,6 +46,11 @@ const authenticateToken = (req, res, next) => {
     next();
   });
 };
+
+// Health check endpoint for Render / monitoring
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
 
 app.get('/api/graph', (req, res) => {
   res.json(routing.getGraph());
@@ -127,6 +136,6 @@ app.post('/api/simulate/tick', (req, res) => {
 simulation.startSimulation(io);
 
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => {
+server.listen(PORT, '0.0.0.0', () => {
   console.log(`MA-TRSN Backend running on port ${PORT}`);
 });

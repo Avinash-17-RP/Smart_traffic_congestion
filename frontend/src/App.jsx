@@ -9,9 +9,31 @@ import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 
 import { API_BASE_URL } from './config';
+import { mockSocket } from './mockEngine';
 
-// Create a singleton socket connection
-export const socket = io(API_BASE_URL);
+// Real socket connection
+const realSocket = io(API_BASE_URL || 'http://localhost:5000', {
+  transports: ['websocket', 'polling'],
+  autoConnect: true
+});
+
+// Unified socket proxy that bridges real Socket.IO and mockSocket for Netlify standalone deployment
+export const socket = {
+  on(event, callback) {
+    realSocket.on(event, callback);
+    mockSocket.on(event, callback);
+  },
+  off(event, callback) {
+    realSocket.off(event, callback);
+    mockSocket.off(event, callback);
+  },
+  emit(event, data) {
+    if (realSocket.connected) {
+      realSocket.emit(event, data);
+    }
+    mockSocket.emit(event, data);
+  }
+};
 
 function Navigation() {
   const location = useLocation();

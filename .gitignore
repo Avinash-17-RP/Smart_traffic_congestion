@@ -3,8 +3,8 @@ node_modules/
 backend/node_modules/
 frontend/node_modules/
 
-# SQLite database (auto-generated on first run)
-backend/matrsn.sqlite
+# SQLite database — committed so it deploys with seeded data
+# (auto-regenerated on first run if missing)
 
 # Build output
 frontend/dist/
